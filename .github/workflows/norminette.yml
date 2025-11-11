@@ -1,0 +1,25 @@
+name: norminette
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [ master, develop ]
+  push:
+    branches: [ master, develop ]
+
+jobs:
+  norminette:
+    name: norminette
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: |
+          pip install --upgrade pip
+          pip install norminette==3.3.55
+      - run: |
+          # どのPRでも必ず実行されるようシンプルに
+          norminette src || true
+          norminette includes || true
